@@ -1,16 +1,11 @@
----
-title: "Code Book"
-author: "jhsdatascience"
-date: "06/20/2014"
-output: html_document
----
+# Code Book
 
 ## The data
 
 The tidy data for this project consists of 180 observations of 68 variables. Each observation corresponds to an activity undertaken by a subject with various measurements of a wearable device. Two of the variables are identifiers: `subjectid` and `activity`. The remaining 66 are of the format:
 
 ```
-measurement_type{mean|std}[[x|y|z]]
+measurement_type{mean|std}[x|y|z]
 ```
 
 where `measurement_type` is the type of measurement recorded by the wearable device, `{mean|std}` denotes whether this variable records the mean or the standard deviation of this measurement for this activity and subject, and `[x|y|z]` is an optional signifier denoting the direction in which the measurement was taken.
@@ -57,11 +52,11 @@ A complete list of features follows:
 
 ## Explanation of how the tidy data set was constructed
 
-Cleaning the UCI HAR Dataset takes place in three steps: getting the data, cleaning it, and aggregating it.
+Cleaning the UCI HAR Dataset takes place in three steps: getting the data, cleaning it, and aggregating it. These steps are performed by the script `run_analysis.R`. Said script contains three functions--`getUCIData`, `cleanUCIData`, and `aggregateUCIData`--corresponding to these steps.
 
-### Getting the UCI data set
+### Getting the UCI Dataset
 
-The function `getData` performs the following steps:
+The function `getUCIData` performs the following steps:
 
 1. Load the feature labels from the file `data/features.txt`. Store these in a variable `feature_labels`
 2. Load the features for the training set and testing set from the files `UCI HAR Dataset/train/X_train.txt` and `UCI HAR Dataset/test/X_test.txt`, respectively, using `feature_labels` as column names. Store these in dataf frames `features_train` and `features_test`, respectively.
@@ -76,7 +71,7 @@ The function `getData` performs the following steps:
 
 ### Cleaning the UCI Dataset
 
-The function `cleanData` takes a data frame `df` such as the one returned by `getData` and performs the following steps:
+The function `cleanUCIData` takes a data frame `df` such as the one returned by `getUCIData` and performs the following steps:
 
 1. Get the activity labels from the file `UCI HAR Dataset/activity_labels.txt`. Store as data frame `activity_labels`.
 2. Convert the feature names of `df` to lower case for readability.
@@ -86,7 +81,7 @@ The function `cleanData` takes a data frame `df` such as the one returned by `ge
 
 ### Aggregate features by activity
 
-The function `getMeans` takes a data frame `df` such as the one returned by `cleanData` and performs the following steps:
+The function `aggregateUCIData` takes a data frame `df` such as the one returned by `cleanUCIData` and performs the following steps:
 
 1. Split `df` by `subjectid` and `activity`.
 2. Get the column means for each of the splits.
