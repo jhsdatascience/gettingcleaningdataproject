@@ -2,7 +2,7 @@
 
 library(plyr)
 
-getData <- function() {
+getUCIData <- function() {
     # Merges the UCI HAR data and extracts only the means and stdevs of the features therein
     
     # Download the raw data if it is not already present
@@ -52,7 +52,7 @@ getData <- function() {
     
 }
 
-cleanData <- function(df) {
+cleanUCIData <- function(df) {
     # Converts variable names and values to lowercase, strips obnoxious periods
     # and converts relevant variables to factors
     
@@ -74,18 +74,15 @@ cleanData <- function(df) {
     df
 }
 
-getMeans <- function(df, file = "", ...) {
+aggregateUCIData <- function(df) {
     # Summarize the data set by the mean of each feature across subjects and activities
     mdf <- ddply(df, .(subjectid, activity), function(x) { colMeans(x[,3:ncol(x)]) })
-    
-    # If we are to write to file . . .
-    if (file != "") write.csv(mdf, file, ...)
     
     # Returns . . .
     mdf
 }
 
-df <- getData()
-df <- cleanData(df)
-df_means <- getMeans(df, "tidy_data.csv", row.names = F)
-
+df <- getUCIData()
+df <- cleanUCIData(df)
+df_means <- aggregateUCIData(df)
+write.csv(df_means, "tidy_data.csv", row.names = F)
